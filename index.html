@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مخزون قطع غيار PlayStation 5 - سلطنة عُمان</title>
+<meta name="description" content="كتالوج وجرد قطع غيار وملحقات PlayStation 5 مع السعر والكمية والبحث والتصفية.">
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--ink:#18212f;--muted:#687386;--line:#e4e8ef;--brand:#1f5eff;--good:#138a54;--warn:#b26a00;--danger:#b42318;--shadow:0 8px 28px rgba(20,35,70,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif}
+header{background:linear-gradient(135deg,#101828,#243b73);color:#fff;padding:28px 18px}
+.wrap{max-width:1250px;margin:auto}.hero{display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}.hero h1{margin:0 0 8px;font-size:30px}.hero p{margin:0;color:#d9e2ff}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.badge{padding:7px 11px;border:1px solid rgba(255,255,255,.2);border-radius:999px;background:rgba(255,255,255,.08);font-size:13px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:16px;margin:18px 0}
+.controls{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px}
+input,select,button{font:inherit}input,select{width:100%;padding:11px 12px;border:1px solid #d8dee8;border-radius:10px;background:#fff}
+button{border:0;border-radius:10px;padding:11px 14px;cursor:pointer;background:#edf2ff;color:#163b9d;font-weight:700}button.primary{background:var(--brand);color:#fff}button.danger{background:#fff0ef;color:var(--danger)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}.stat{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfcfe}.stat b{display:block;font-size:22px;margin-top:4px}.muted{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 4px 18px rgba(20,35,70,.05);display:flex;flex-direction:column}
+.pic{height:190px;background:#f7f8fb;display:flex;align-items:center;justify-content:center;overflow:hidden}.pic img{width:100%;height:100%;object-fit:contain}
+.body{padding:15px}.title{font-size:17px;font-weight:800;margin:0 0 6px}.en{font-size:12px;color:var(--muted);direction:ltr;text-align:right}.desc{font-size:13px;line-height:1.7;color:#4d596b;min-height:64px;margin:10px 0}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.tag{font-size:11px;padding:5px 8px;border-radius:999px;background:#f0f4ff;color:#3356a8}.tag.gray{background:#f2f3f5;color:#596273}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}.field input{padding:9px}.stock{margin-top:9px;font-size:12px;font-weight:700}.stock.ok{color:var(--good)}.stock.low{color:var(--warn)}.stock.zero{color:var(--danger)}
+.actions{display:flex;gap:7px;margin-top:10px}.actions button{flex:1;padding:9px}
+.empty{text-align:center;padding:45px;color:var(--muted)}
+footer{max-width:1250px;margin:30px auto;padding:0 18px 40px;color:#687386;font-size:12px;line-height:1.8}
+.notice{background:#fff8e8;border:1px solid #f1d38b;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.7}
+@media(max-width:900px){.controls{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:550px){.controls{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.hero h1{font-size:23px}}
+</style>
+</head>
+<body>
+<header>
+<div class="wrap hero">
+<div>
+<h1>مخزون قطع غيار PlayStation 5 — عُمان</h1>
+<p>كتالوج صيانة وبيع + جرد المخزون + أسعار بالريال العُماني</p>
+<div class="badges"><span class="badge">PS5 Original / Slim / Digital</span><span class="badge">DualSense</span><span class="badge">ملحقات</span><span class="badge">يحفظ البيانات محلياً</span></div>
+</div>
+<div><button class="primary" onclick="exportCSV()">تصدير الجرد CSV</button> <button onclick="resetAll()">تصفير الكميات والأسعار</button></div>
+</div>
+</header>
+
+<main class="wrap">
+<section class="panel">
+<div class="notice"><b>مهم:</b> هذه صفحة كتالوج وجرد وليست تأكيداً للمخزون الفعلي في السوق العُماني. اترك السعر والكمية كما هي حتى تدخل بيانات محلك. بعض القطع تختلف حسب رقم الموديل CFI؛ افحص رقم الجهاز قبل الطلب أو التركيب.</div>
+<div class="controls" style="margin-top:12px">
+<input id="q" placeholder="ابحث: HDMI، مروحة، CFI-1216، يد تحكم..." oninput="render()">
+<select id="cat" onchange="render()"><option value="">كل الأقسام</option></select>
+<select id="model" onchange="render()"><option value="">كل الموديلات</option></select>
+<select id="stockFilter" onchange="render()"><option value="">كل الحالات</option><option value="available">متوفر (الكمية &gt; 0)</option><option value="low">منخفض (1–2)</option><option value="zero">نفد</option></select>
+<button onclick="clearSearch()">مسح</button>
+</div>
+<div class="stats">
+<div class="stat">عدد الأصناف<b id="sItems">0</b></div>
+<div class="stat">إجمالي القطع<b id="sQty">0</b></div>
+<div class="stat">أصناف متوفرة<b id="sAvailable">0</b></div>
+<div class="stat">قيمة المخزون<b id="sValue">0.000 ر.ع</b></div>
+</div>
+</section>
+
+<section class="panel">
+<div id="grid" class="grid"></div>
+<div id="empty" class="empty" style="display:none">لا توجد نتائج مطابقة.</div>
+</section>
+</main>
+
+<footer>
+<b>المصادر المرجعية للكتالوج:</b> تم بناء قائمة الفئات الرئيسية بالاعتماد على صفحات قطع PS5 في iFixit، وصفحات ملحقات PlayStation الرسمية الخاصة بالمنطقة. الصور الموجودة في بعض البطاقات صور مرجعية خارجية؛ يمكنك استبدالها بصور منتجات محلك.
+<br>
+ملاحظة: لا تعني عبارة "متوفر" داخل أي بطاقة أن القطعة متوفرة فعلياً في عُمان؛ حالة المخزون التي تعتمد عليها هي خانة الكمية التي تدخلها أنت.
+</footer>
+
+<script>
+const IMG = {
+ fan:"https://cart-products.cdn.ifixit.com/cart-products/RPQAjWaA1jRanwOM.large",
+ hdmi:"https://cart-products.cdn.ifixit.com/cart-products/ZTVGVPeCeMrLKTOe.large",
+ psu:"https://cart-products.cdn.ifixit.com/cart-products/mND6tq1CHkdxwMXb.large",
+ io:"https://cart-products.cdn.ifixit.com/cart-products/JFNFWmSke5aQ5KFb.large",
+ kit:"https://cart-products.cdn.ifixit.com/cart-products/OXpxutTU5rXRIIeR.large",
+ power:"https://cart-products.cdn.ifixit.com/cart-products/ZXu3GZXaiOPDc2UL.large",
+ grates:"https://cart-products.cdn.ifixit.com/cart-products/oKFYEfBxWuntlWiU.large",
+ front:"https://cart-products.cdn.ifixit.com/cart-products/Zj6jlBKUyteyiH2e.large",
+ rear:"https://cart-products.cdn.ifixit.com/cart-products/vhNLBtdEDkJQHbaM.large",
+ board:"https://cart-products.cdn.ifixit.com/cart-products/PBuWZ1XpeOnKIkIe.large",
+ heatsink:"https://cart-products.cdn.ifixit.com/cart-products/Z2l2k4nKlarREbs4.large"
+};
+const fallback = "https://cart-products.cdn.ifixit.com/cart-products/ZTVGVPeCeMrLKTOe.large";
+
+const products = [
+["ps5-fan","مروحة تبريد PS5","PlayStation 5 Fan","تبريد الجهاز؛ تستبدل عند الضجيج العالي أو ضعف التهوية أو توقف المروحة.","تبريد","PS5 Original / حسب الإصدار",IMG.fan],
+["ps5-hdmi","منفذ HDMI للجهاز","PlayStation 5 HDMI Port","منفذ لحام على اللوحة؛ مناسب لإصلاح منفذ HDMI المتضرر أو المكسور.","لوحات ومنافذ","PS5 Original / تحقق من الموديل",IMG.hdmi],
+["ps5-psu","مزود طاقة","PS5 Power Supply","مزود الطاقة الداخلي. يجب مطابقة رقم الموديل والقدرة قبل التركيب.","طاقة","PS5 Original / حسب CFI",IMG.psu],
+["ps5-io","لوحة USB / USB-C I/O","PS5 USB & USB-C I/O Board","لوحة منافذ الإدخال والإخراج؛ تستخدم عند تلف المنافذ أو اللوحة.","لوحات ومنافذ","PS5 Original / CFI-10xx وما يناسبه",IMG.io],
+["ps5-m2","مشتت SSD M.2","M.2 NVMe Heatsink","مشتت لقرص M.2 الداخلي لتقليل الحرارة أثناء الاستخدام.","تخزين","PS5",IMG.kit],
+["ps5-button","لوحة زر التشغيل/الإخراج","Power & Eject Button Board","لوحة أزرار التشغيل والإخراج للأجهزة التي تحتوي على قارئ أقراص.","أزرار","PS5 Original / حسب CFI",IMG.power],
+["ps5-ioframe","إطار منافذ خلفي","I/O Port Frame","قطعة بلاستيكية حول منطقة المنافذ الخلفية؛ تستبدل عند الكسر أو التلف.","هيكل بلاستيكي","PS5",IMG.io],
+["ps5-grates","شبك/شبكات بلاستيكية أمامية وخلفية","Front & Rear Plastic Grates","شبكات تهوية بلاستيكية داخل الهيكل؛ تفيد في التلف أو الكسر.","هيكل بلاستيكي","PS5 Original",IMG.grates],
+["ps5-frontframe","الإطار الأمامي الداخلي","Front Frame","هيكل داخلي أمامي يثبت مكونات الجهاز؛ يختلف حسب الإصدار.","هيكل بلاستيكي","PS5 Original",IMG.front],
+["ps5-rearframe","الإطار الخلفي الداخلي","Rear Frame","هيكل خلفي داخلي قرب فتحة الأقراص والمنافذ.","هيكل بلاستيكي","PS5 Original",IMG.rear],
+["ps5-frontpanel","غطاء/لوحة أمامية","Front Panel","لوحة خارجية قابلة للاستبدال عند الخدوش أو الكسر.","أغطية","PS5 Original",IMG.front],
+["ps5-rearpanel","غطاء/لوحة خلفية","Rear Panel","لوحة خارجية خلفية؛ يجب مطابقة شكل الإصدار.","أغطية","PS5 Original",IMG.rear],
+["ps5-mobo","لوحة أم + قارئ بصري مقترن","Motherboard & Paired Optical Drive","قطعة عالية الحساسية؛ توافق اللوحة والقارئ والاقتران مهم جداً.","لوحة أم","PS5 Disc / حسب CFI",IMG.board],
+["ps5-heatsink","مشتت حراري","PS5 Heat Sink","مسؤول عن نقل الحرارة بعيداً عن المعالج؛ يحتاج تركيباً صحيحاً ومواد حرارية مناسبة.","تبريد","PS5 Original",IMG.heatsink],
+["ps5-thermal","مادة/معجون حراري","Thermal Interface Material","مستهلك صيانة للتبريد؛ سجله كقطعة استهلاكية منفصلة.","مستهلكات","PS5 / حسب الإصلاح",fallback],
+["ps5-liquid-metal","مادة تبريد معدنية سائلة - خدمة","Liquid Metal Service","خدمة/مادة مرتبطة بالتبريد؛ تعامل معها كمواد صيانة وليست قطعة إلكترونية جاهزة.","مستهلكات","PS5 Original",fallback],
+["ps5-disc-drive","قارئ أقراص كامل","Optical Disc Drive","قارئ Blu-ray/DVD للأجهزة المزودة بمحرك أقراص؛ التوافق والاقتران مهمان حسب الإصدار.","قارئ أقراص","PS5 Disc / Slim حسب الموديل",fallback],
+["ps5-disc-laser","وحدة ليزر القارئ","Optical Laser Assembly","جزء من نظام القراءة؛ لا تستبدله قبل فحص المحرك والعدسة واللوحة والتوصيلات.","قارئ أقراص","حسب محرك الأقراص",fallback],
+["ps5-disc-motor","محرك سحب/تدوير القرص","Disc Drive Motor","محرك ميكانيكي داخل قارئ الأقراص؛ يفحص قبل الاستبدال.","قارئ أقراص","حسب الإصدار",fallback],
+["ps5-ribbon","فلاتات/كابلات مرنة","FPC / Ribbon Cables","كابلات مرنة بين اللوحات والمنافذ والأزرار؛ يجب مطابقة عدد السنون والطول.","كابلات","حسب CFI",fallback],
+["ps5-screws","طقم براغي PS5","PS5 Screw Set","طقم براغي للصيانة وإعادة التجميع؛ سجله كمواد صغيرة.","مستهلكات","PS5",fallback],
+["ps5-stand","قاعدة الجهاز","PS5 Stand","قاعدة تثبيت الجهاز؛ تختلف طريقة التثبيت بين إصدارات الجهاز.","ملحقات الجهاز","PS5",fallback],
+["ps5-sidecovers","أغطية جانبية PS5","PS5 Side Covers","ألواح خارجية قابلة للتغيير؛ مناسبة للتجميل أو استبدال المكسور.","أغطية","PS5 / Slim حسب الموديل",IMG.front],
+["dualsense-battery","بطارية DualSense","DualSense Controller Battery","بطارية بديلة لوحدة التحكم؛ تحقق من نسخة وحدة التحكم قبل التركيب.","DualSense","v1 / v2 / حسب البطارية",fallback],
+["dualsense-joystick","عصا Analog DualSense","DualSense Joystick","قطعة إصلاح لمشكلة الانحراف أو عدم الاستجابة؛ تحتاج لحاماً/إصلاحاً حسب النسخة.","DualSense","v1/v2/نسخة اللوحة",fallback],
+["dualsense-tmr","عصي TMR DualSense","Gulikit TMR Joystick Pair","بديل للعصي التقليدية؛ يحتاج تركيباً ومعايرة مناسبين.","DualSense","حسب لوحة DualSense",fallback],
+["dualsense-cap","غطاء العصا","DualSense Joystick Cap","غطاء بلاستيكي خارجي للعصا؛ مناسب عند التلف أو الاهتراء.","DualSense","DualSense",fallback],
+["dualsense-trigger","أغطية L2/R2 والنوابض","Trigger Button Cover Set","أجزاء ميكانيكية خارجية للمحفزات؛ تختلف بين إصدارات DualSense.","DualSense","v1/v2/حسب النسخة",fallback],
+["dualsense-membrane","ربلات الأزرار","Button Rubber Membrane","ربلات توصيل للأزرار؛ تتلف مع الاستخدام ويمكن استبدالها في النسخ المتوافقة.","DualSense","حسب النسخة",fallback],
+["dualsense-speaker","سماعة DualSense","DualSense Speaker","سماعة داخلية للصوت؛ تستبدل عند فقدان أو ضعف الصوت بعد فحص اللوحة.","DualSense","DualSense",fallback],
+["dualsense-motor","محرك اهتزاز DualSense","Vibration Motor","محرك اهتزاز داخلي؛ يجب مطابقة الجهة/الإصدار.","DualSense","حسب النسخة",fallback],
+["dualsense-shell","هيكل DualSense","DualSense Shell / Midframe","الهيكل والمنتصف البلاستيكي؛ مناسب للكسر أو تغيير اللون.","DualSense","v1/v2/حسب النسخة",fallback],
+["dualsense-buttons","طقم أزرار DualSense","DualSense Buttons Set","أزرار △ ○ × □ وD-pad والأزرار الأخرى؛ مطابقة النسخة مهمة.","DualSense","حسب النسخة",fallback],
+["dualsense-usbc","منفذ USB-C DualSense","DualSense USB-C Port","منفذ الشحن/الاتصال؛ يحتاج لحاماً دقيقاً وفحص اللوحة.","DualSense","حسب نسخة اللوحة",fallback],
+["dualsense-touch","لوحة اللمس","DualSense Touchpad","لوحة اللمس الخارجية؛ تختلف حسب نسخة وحدة التحكم.","DualSense","حسب النسخة",fallback],
+["dualsense-mic","ميكروفون DualSense","DualSense Microphone","ميكروفون داخلي؛ يفحص مع مسار الصوت واللوحة قبل الاستبدال.","DualSense","DualSense",fallback],
+["accessories-charger","شاحن DualSense","DualSense Charging Station","ملحق شحن لوحدتي تحكم؛ ليس قطعة داخلية للجهاز.","ملحقات","PS5",fallback],
+["accessories-cable","كابل USB-C","USB-C Charging/Data Cable","كابل للشحن والبيانات؛ مفيد للبيع وخدمات الصيانة.","كابلات","PS5 / DualSense",fallback],
+["accessories-hdmi","كابل HDMI","HDMI Cable","كابل توصيل الصورة والصوت؛ يستخدم مع PS5 والتلفاز/الشاشة.","كابلات","PS5",fallback],
+["accessories-camera","كاميرا HD","HD Camera","كاميرا PS5 للتصوير والبث؛ ملحق رسمي.","ملحقات","PS5",fallback],
+["accessories-media","جهاز التحكم بالوسائط","Media Remote","للتحكم في الأفلام والتطبيقات على PS5.","ملحقات","PS5",fallback],
+["accessories-headset","سماعة PULSE 3D","PULSE 3D Wireless Headset","سماعة لاسلكية مخصصة لتجربة الصوت على PS5؛ تحتوي على ميكروفونات وتحكمات.","ملحقات","PS5 / PS4",fallback],
+["accessories-pulseelite","سماعة PULSE Elite","PULSE Elite Wireless Headset","سماعة لاسلكية حديثة من منظومة PlayStation؛ سجّل اللون والإصدار إن كان مهماً للمخزون.","ملحقات","PS5",fallback],
+["accessories-pulseexplore","سماعات PULSE Explore","PULSE Explore Wireless Earbuds","سماعات أذن لاسلكية متوافقة مع منظومة PS Link.","ملحقات","PS5",fallback],
+["accessories-portals","PlayStation Portal","PlayStation Portal Remote Player","جهاز لعب عن بعد مرتبط بمنظومة PS5؛ سجله كملحق/جهاز وليس كقطعة إصلاح داخلية.","ملحقات","PS5",fallback],
+["accessories-edge","DualSense Edge","DualSense Edge Wireless Controller","وحدة تحكم متقدمة قابلة للتخصيص؛ يمكن جردها كمنتج كامل.","ملحقات","PS5",fallback],
+["accessories-access","Access Controller","Access Controller","وحدة تحكم قابلة للتخصيص وموجهة لإتاحة خيارات تحكم أوسع.","ملحقات","PS5",fallback],
+["storage-ssd","SSD M.2 NVMe","M.2 NVMe SSD","تخزين إضافي متوافق مع PS5 ضمن متطلبات السرعة والحجم؛ سجّل السعة كجزء من اسم الصنف.","تخزين","PS5",fallback],
+["storage-heatsink","مشتت SSD M.2","M.2 SSD Heatsink","مشتت للـSSD الداخلي؛ يمكن جرده بشكل منفصل إذا كنت تبيعه منفرداً.","تخزين","PS5",IMG.kit],
+["tools-kit","عدة فتح وصيانة","PS5 Repair Toolkit","عدة مفكات وفتح وتنظيف للصيانة؛ ليست قطعة غيار لكنها مفيدة في قسم الورشة.","أدوات","PS5 / DualSense",IMG.kit]
+];
+
+const key="ps5OmanInventoryV1";
+let state=JSON.parse(localStorage.getItem(key)||"{}");
+const cats=[...new Set(products.map(p=>p[4]))].sort();
+const models=[...new Set(products.map(p=>p[5]))].sort();
+document.getElementById("cat").innerHTML='<option value="">كل الأقسام</option>'+cats.map(x=>`<option>${x}</option>`).join("");
+document.getElementById("model").innerHTML='<option value="">كل الموديلات</option>'+models.map(x=>`<option>${x}</option>`).join("");
+
+function get(id){return state[id]||{price:"",qty:0}}
+function save(){localStorage.setItem(key,JSON.stringify(state));updateStats()}
+function money(v){return Number(v||0).toFixed(3)}
+function stockClass(q){return q<=0?"zero":q<=2?"low":"ok"}
+function stockText(q){return q<=0?"نفد / غير مدخل":q<=2?"كمية منخفضة":"متوفر"}
+
+function render(){
+ const q=document.getElementById("q").value.trim().toLowerCase();
+ const cat=document.getElementById("cat").value, model=document.getElementById("model").value, sf=document.getElementById("stockFilter").value;
+ const list=products.filter(p=>{
+   const hay=p.slice(0,6).join(" ").toLowerCase();
+   const d=get(p[0]), qty=Number(d.qty||0);
+   return (!q||hay.includes(q))&&(!cat||p[4]===cat)&&(!model||p[5]===model)&&(!sf||(sf==="available"&&qty>0)||(sf==="low"&&qty>0&&qty<=2)||(sf==="zero"&&qty<=0));
+ });
+ const grid=document.getElementById("grid"); document.getElementById("empty").style.display=list.length?"none":"block";
+ grid.innerHTML=list.map(p=>{
+   const d=get(p[0]), qn=Number(d.qty||0);
+   return `<article class="card">
+   <div class="pic"><img loading="lazy" src="${p[6]}" alt="${p[1]}" onerror="this.src='${fallback}'"></div>
+   <div class="body">
+    <h2 class="title">${p[1]}</h2><div class="en">${p[2]}</div>
+    <div class="tags"><span class="tag">${p[4]}</span><span class="tag gray">${p[5]}</span></div>
+    <p class="desc">${p[3]}</p>
+    <div class="fields">
+      <div class="field"><label>السعر (ر.ع)</label><input type="number" min="0" step="0.001" value="${d.price}" placeholder="مثال: 12.500" onchange="setVal('${p[0]}','price',this.value)"></div>
+      <div class="field"><label>العدد في المخزون</label><input type="number" min="0" step="1" value="${qn}" onchange="setVal('${p[0]}','qty',this.value)"></div>
+    </div>
+    <div class="stock ${stockClass(qn)}">الحالة: ${stockText(qn)} — ${qn} قطعة</div>
+    <div class="actions"><button onclick="setVal('${p[0]}','qty',Number(get('${p[0]}').qty||0)+1)">+1</button><button onclick="setVal('${p[0]}','qty',Math.max(0,Number(get('${p[0]}').qty||0)-1))">−1</button><button onclick="setVal('${p[0]}','qty',0)">تصفير</button></div>
+   </div></article>`;
+ }).join("");
+ updateStats();
+}
+function setVal(id,k,v){state[id]=state[id]||{price:"",qty:0};state[id][k]=k==="qty"?Math.max(0,Number(v||0)):v;save();render()}
+function updateStats(){
+ let qty=0,value=0,avail=0;
+ products.forEach(p=>{const d=get(p[0]),q=Number(d.qty||0),pr=Number(d.price||0);qty+=q;value+=q*pr;if(q>0)avail++});
+ document.getElementById("sItems").textContent=products.length;
+ document.getElementById("sQty").textContent=qty;
+ document.getElementById("sAvailable").textContent=avail;
+ document.getElementById("sValue").textContent=money(value)+" ر.ع";
+}
+function clearSearch(){document.getElementById("q").value="";document.getElementById("cat").value="";document.getElementById("model").value="";document.getElementById("stockFilter").value="";render()}
+function resetAll(){if(confirm("هل تريد تصفير جميع الأسعار والكميات؟")){state={};save();render()}}
+function exportCSV(){
+ let rows=[["الكود","الصنف","الاسم الإنجليزي","القسم","التوافق","السعر ر.ع","الكمية","قيمة المخزون"]];
+ products.forEach(p=>{let d=get(p[0]),q=Number(d.qty||0),pr=Number(d.price||0);rows.push([p[0],p[1],p[2],p[4],p[5],pr,q,money(pr*q)])});
+ const csv="\ufeff"+rows.map(r=>r.map(x=>`"${String(x).replaceAll('"','""')}"`).join(",")).join("\n");
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="ps5-oman-inventory.csv";a.click();URL.revokeObjectURL(a.href);
+}
+render();
+</script>
+</body>
+</html>
